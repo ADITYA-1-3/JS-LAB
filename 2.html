@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess Number</title>
+</head>
+<body>
+    <input id = "input" placeholder="ENTER THE NUMBER:">
+    <button id = "btn" onclick = "GuessNum()">Check</button>
+    <p id = "result" ></p>
+    <p id = "result1" ></p>
+    <script>
+        const randomnum = Math.floor(Math.random()*10)+1 ;
+        console.log(randomnum);
+        let count = 0 ;
+        let result ;
+
+        function GuessNum(){
+            let number = document.getElementById("input").value;
+            if(randomnum == number){
+                result = "YOU GUESS IS CORRECT !"
+            }
+            else if(randomnum>number){
+                result = "TOO LOW TRY AGAIN !"
+                count++;
+            }
+            else{
+                result = "TOO HIGH TRY AGAIN !"
+                count++;
+            }
+            document.getElementById("result").innerText = result;
+        document.getElementById("result1").innerText ="Attempts:"+ count;
+        }
+        
+
+    </script>
+</body>
+</html>
