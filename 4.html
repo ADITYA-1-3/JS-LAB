@@ -1,131 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF--8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Validation Form</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            width: 90%;
-            max-width: 400px;
-        }
-        .input-group {
-            margin-bottom: 1rem;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        #message {
-            margin-top: 1rem;
-            font-weight: bold;
-            text-align: center;
-        }
-        .success { color: green; }
-        .error { color: red; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Validation Form</title>
 </head>
 <body>
-    <div class="container">
-        <h2>Register</h2>
-        <form id="registration-form" novalidate>
-            <div class="input-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name">
-            </div>
-            <div class="input-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email">
-            </div>
-            <div class="input-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password">
-            </div>
-            <div class="input-group">
-                <label for="phone">Phone Number:</label>
-                <input type="tel" id="phone" name="phone">
-            </div>
-            <button type="submit">Submit</button>
-            <p id="message"></p>
-        </form>
-    </div>
+  <form id="registration-form" novalidate>
+    <label>Name:</label>
+    <input type="text" id="name" name="name"><br><br>
+    <label>Email:</label>
+    <input type="email" id="email" name="email"><br><br>
+    <label>Password:</label>
+    <input type="password" id="password" name="password"><br><br>
+    <label>Phone Number:</label>
+    <input type="tel" id="phone" name="phone"><br><br>
+    <button type="submit">Submit</button>
+    <p id="message"></p>
+  </form>
 
-    <script>
-        const form = document.getElementById('registration-form');
-        const messageElement = document.getElementById('message');
+  <script>
+    const form = document.getElementById('registration-form');
+    const messageElement = document.getElementById('message');
 
-        form.addEventListener('submit', (event) => {
-            // Prevent the form from submitting and reloading the page
-            event.preventDefault(); 
-            
-            // Get values from the form fields
-            const name = form.elements['name'].value.trim();
-            const email = form.elements['email'].value.trim();
-            const password = form.elements['password'].value.trim();
-            const phone = form.elements['phone'].value.trim();
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const name = form.elements['name'].value.trim();
+      const email = form.elements['email'].value.trim();
+      const password = form.elements['password'].value.trim();
+      const phone = form.elements['phone'].value.trim();
 
-            // --- Validation Logic ---
-            if (name === '') {
-                displayMessage('Name cannot be empty.', 'error');
-                return;
-            }
+      if (name === '') {
+        showMessage('Name cannot be empty.', 'red');
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showMessage('Enter a valid email.', 'red');
+        return;
+      }
+      if (password.length < 8) {
+        showMessage('Password must be at least 8 characters.', 'red');
+        return;
+      }
+      if (!/^\d{10}$/.test(phone)) {
+        showMessage('Enter a valid 10-digit phone number.', 'red');
+        return;
+      }
+      showMessage('Registration successful!', 'green');
+      form.reset();
+    });
 
-            // Regex for a simple email validation
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                displayMessage('Please enter a valid email address.', 'error');
-                return;
-            }
-
-            if (password.length < 8) {
-                displayMessage('Password must be at least 8 characters long.', 'error');
-                return;
-            }
-            
-            // Regex for a 10-digit phone number
-            if (!/^\d{10}$/.test(phone)) {
-                displayMessage('Please enter a valid 10-digit phone number.', 'error');
-                return;
-            }
-
-            // If all validation passes
-            displayMessage('Registration successful!', 'success');
-            form.reset(); // Optionally clear the form
-        });
-
-        function displayMessage(message, type) {
-            messageElement.textContent = message;
-            messageElement.className = type; // Applies either 'success' or 'error' class
-        }
-    </script>
+    function showMessage(text, color) {
+      messageElement.textContent = text;
+      messageElement.style.color = color;
+    }
+  </script>
 </body>
 </html>
