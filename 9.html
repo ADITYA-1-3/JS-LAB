@@ -1,128 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Slider</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden; /* Prevent body scroll if image is too big */
-        }
-        .slider-container {
-            position: relative;
-            width: 80vw; /* 80% of viewport width */
-            max-width: 600px; /* Maximum width for larger screens */
-            height: 50vh; /* 50% of viewport height */
-            max-height: 400px;
-            overflow: hidden; /* Hide parts of images not currently visible */
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        .slider-image {
-            width: 100%;
-            height: 100%;
-            display: none; /* Hide all images by default */
-            object-fit: cover; /* Cover the container without distorting aspect ratio */
-            transition: opacity 0.5s ease-in-out; /* Smooth fade effect */
-            position: absolute; /* Position for overlaying images */
-            top: 0;
-            left: 0;
-        }
-        .slider-image.active {
-            display: block; /* Only show the active image */
-            opacity: 1;
-        }
-        .slider-image:not(.active) {
-            opacity: 0;
-        }
-
-        .slider-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0,0,0,0.5);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            font-size: 1.5em;
-            border-radius: 5px;
-            z-index: 10; /* Ensure buttons are above images */
-        }
-        #prevBtn {
-            left: 10px;
-        }
-        #nextBtn {
-            right: 10px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Slider</title>
 </head>
 <body>
+  <div class="slider">
+    <img src="https://picsum.photos/id/237/800/600" class="slide active">
+    <img src="https://picsum.photos/id/238/800/600" class="slide">
+    <img src="https://picsum.photos/id/239/800/600" class="slide">
+    <img src="https://picsum.photos/id/240/800/600" class="slide">
+    <button id="prev">&#10094;</button>
+    <button id="next">&#10095;</button>
+  </div>
 
-    <div class="slider-container">
-        <img src="https://picsum.photos/id/237/800/600" alt="Image 1" class="slider-image active">
-        <img src="https://picsum.photos/id/238/800/600" alt="Image 2" class="slider-image">
-        <img src="https://picsum.photos/id/239/800/600" alt="Image 3" class="slider-image">
-        <img src="https://picsum.photos/id/240/800/600" alt="Image 4" class="slider-image">
-        
-        <button id="prevBtn" class="slider-btn">&#10094;</button> <button id="nextBtn" class="slider-btn">&#10095;</button> </div>
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    let index = 0, interval = 3000;
+    const next = document.getElementById('next');
+    const prev = document.getElementById('prev');
 
-    <script>
-        // --- Image Data (or directly from HTML) ---
-        const images = document.querySelectorAll('.slider-image');
-        let currentImageIndex = 0;
-        const slideInterval = 3000; // 3 seconds
+    function show(i) {
+      slides.forEach(s => s.classList.remove('active'));
+      slides[i].classList.add('active');
+    }
 
-        // --- Functions ---
+    function nextSlide() {
+      index = (index + 1) % slides.length;
+      show(index);
+    }
 
-        // Function to show a specific image
-        function showImage(index) {
-            // Remove 'active' class from all images
-            images.forEach(img => img.classList.remove('active'));
-            // Add 'active' class to the image at the given index
-            images[index].classList.add('active');
-        }
+    function prevSlide() {
+      index = (index - 1 + slides.length) % slides.length;
+      show(index);
+    }
 
-        // Function to go to the next image
-        function nextImage() {
-            currentImageIndex++;
-            if (currentImageIndex >= images.length) {
-                currentImageIndex = 0; // Loop back to the first image
-            }
-            showImage(currentImageIndex);
-        }
-
-        // Function to go to the previous image
-        function prevImage() {
-            currentImageIndex--;
-            if (currentImageIndex < 0) {
-                currentImageIndex = images.length - 1; // Loop to the last image
-            }
-            showImage(currentImageIndex);
-        }
-
-        // --- Automatic Sliding ---
-        let autoSlideTimer = setInterval(nextImage, slideInterval);
-
-        // --- Manual Button Clicks ---
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            clearInterval(autoSlideTimer); // Stop auto-slide on manual interaction
-            nextImage();
-            autoSlideTimer = setInterval(nextImage, slideInterval); // Restart auto-slide
-        });
-
-        document.getElementById('prevBtn').addEventListener('click', () => {
-            clearInterval(autoSlideTimer); // Stop auto-slide on manual interaction
-            prevImage();
-            autoSlideTimer = setInterval(nextImage, slideInterval); // Restart auto-slide
-        });
-    </script>
+    let timer = setInterval(nextSlide, interval);
+    next.addEventListener('click', () => {
+      clearInterval(timer);
+      nextSlide();
+      timer = setInterval(nextSlide, interval);
+    });
+    prev.addEventListener('click', () => {
+      clearInterval(timer);
+      prevSlide();
+      timer = setInterval(nextSlide, interval);
+    });
+  </script>
 </body>
 </html>
