@@ -1,70 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Analyser</title>
-    <style>
-        /* This makes our result display newlines correctly */
-        #result {
-            white-space: pre-wrap; 
-            font-family: monospace; /* Makes the output line up nicely */
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Analyser</title>
 </head>
 <body>
-    <textarea id="text" placeholder="Enter your Text..." rows="10" cols="50"></textarea><br>
-    <button id="btn">Analyse Text</button>
-    <p id="result"></p>
+  <textarea id="text" placeholder="Enter your text..." rows="10" cols="50"></textarea><br>
+  <button id="btn">Analyse Text</button>
+  <p id="result"></p>
 
-    <script>
-        // Best practice: Attach the event listener in JavaScript
-        document.getElementById("btn").addEventListener("click", textAnalyse);
+  <script>
+    document.getElementById("btn").addEventListener("click", textAnalyse);
 
-        function textAnalyse() {
-            const text = document.getElementById("text").value;
+    function textAnalyse() {
+      const text = document.getElementById("text").value;
+      const charCount = text.length;
+      const wordsArray = text.trim().split(/\s+/);
+      const wordCount = text.trim() === "" ? 0 : wordsArray.length;
+      const lineCount = text.split(/\n/).length;
 
-            // --- Basic Analysis ---
-            const charCount = text.length;
-            const wordsArray = text.trim().split(/\s+/);
-            const wordCount = text.trim() === "" ? 0 : wordsArray.length;
-            const lineCount = text.split(/\n/).length;
+      let result = `Character Count: ${charCount}\nWord Count: ${wordCount}\nLine Count: ${lineCount}`;
+      const wordFrequencies = new Map();
 
-            let result = `Character Count: ${charCount}\nWord Count: ${wordCount}\nLine Count: ${lineCount}`;
-            
-            // --- Word Frequency Analysis (The New Part) ---
-            const wordFrequencies = new Map();
+      const cleanedWords = text
+        .toLowerCase()
+        .replace(/[^\w\s']/g, "")
+        .trim()
+        .split(/\s+/);
 
-            // 1. Clean and process the words
-            const cleanedWords = text
-                .toLowerCase() // Make everything lowercase
-                .replace(/[^\w\s']/g, "") // Remove punctuation except apostrophes
-                .trim()
-                .split(/\s+/);
-
-            // 2. Loop through words and count them
-            if (cleanedWords[0] !== "") {
-                for (const word of cleanedWords) {
-                    const count = wordFrequencies.get(word) || 0; // Get current count or 0
-                    wordFrequencies.set(word, count + 1); // Set the new count
-                }
-            }
-            
-            // 3. Format the frequency list for display
-            result += `\n\n--- Word Frequencies ---\n`;
-            if (wordFrequencies.size > 0) {
-                // Convert Map to an array, sort it, and then format it
-                const sortedFrequencies = Array.from(wordFrequencies.entries()).sort();
-                for (const [word, count] of sortedFrequencies) {
-                    result += `${word.padEnd(20)}: ${count}\n`;
-                }
-            } else {
-                result += `No words to analyse.`;
-            }
-
-            // --- Display the Final Result ---
-            document.getElementById("result").innerText = result;
+      if (cleanedWords[0] !== "") {
+        for (const word of cleanedWords) {
+          const count = wordFrequencies.get(word) || 0;
+          wordFrequencies.set(word, count + 1);
         }
-    </script>
+      }
+
+      result += `\n\n--- Word Frequencies ---\n`;
+      if (wordFrequencies.size > 0) {
+        const sortedFrequencies = Array.from(wordFrequencies.entries()).sort();
+        for (const [word, count] of sortedFrequencies) {
+          result += `${word.padEnd(20)}: ${count}\n`;
+        }
+      } else {
+        result += `No words to analyse.`;
+      }
+
+      document.getElementById("result").innerText = result;
+    }
+  </script>
 </body>
 </html>
