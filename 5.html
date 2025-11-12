@@ -1,68 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word Counter</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            width: 90%;
-            max-width: 500px;
-            text-align: center;
-        }
-        textarea {
-            width: 100%;
-            padding: 10px;
-            font-size: 1rem;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            box-sizing: border-box; /* Ensures padding doesn't add to width */
-            margin-bottom: 1rem;
-        }
-        #counter {
-            font-size: 1.1rem;
-            color: #555;
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word Counter</title>
 </head>
 <body>
-    <div class="container">
-        <h2>Word and Character Counter</h2>
-        <textarea id="text-input" rows="8" placeholder="Start typing here..."></textarea>
-        <p id="counter">0 Characters, 0 Words</p>
-    </div>
+  <h2>Word and Character Counter</h2>
+  <textarea id="text-input" rows="8" placeholder="Start typing..."></textarea>
+  <p id="counter">0 Characters, 0 Words</p>
 
-    <script>
-        // --- Select the elements ---
-        const textInput = document.getElementById('text-input');
-        const counterDisplay = document.getElementById('counter');
+  <script>
+    const textInput = document.getElementById('text-input');
+    const counterDisplay = document.getElementById('counter');
 
-        // --- Add an event listener ---
-        textInput.addEventListener('input', () => {
-            // 1. Get the current text from the textarea
-            const text = textInput.value;
-
-            // 2. Calculate character count
-            const charCount = text.length;
-
-            // 3. Calculate word count
-            const words = text.trim().split(/\s+/);
-            // Handle the edge case of an empty input
-            const wordCount = text.trim() === '' ? 0 : words.length;
-
-            // 4. Update the display
-            counterDisplay.textContent = `${charCount} Characters, ${wordCount} Words`;
-        });
-    </script>
+    textInput.addEventListener('input', () => {
+      const text = textInput.value;
+      const charCount = text.length;
+      const words = text.trim().split(/\s+/);
+      const wordCount = text.trim() === '' ? 0 : words.length;
+      counterDisplay.textContent = `${charCount} Characters, ${wordCount} Words`;
+    });
+  </script>
 </body>
 </html>
